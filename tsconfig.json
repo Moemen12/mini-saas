@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2017",
+    "forceConsistentCasingInFileNames": true,
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -13,22 +14,34 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
+
     "plugins": [
-      {
-        "name": "next"
-      }
+      { "name": "next" }
     ],
+
+    "baseUrl": "src",
+
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["*"],
+
+      // 🔒 FEATURES: BARREL-ONLY
+      "@features/*": ["features/*/index.ts"],
+
+      // 🟢 SAFE TO IMPORT DEEPLY
+      "@components/*": ["components/*"],
+      "@hooks/*": ["hooks/*"],
+      "@lib/*": ["lib/*"]
     }
   },
+
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "**/*.mts",
     ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    ".next/dev/types/**/*.ts"
   ],
+
   "exclude": ["node_modules"]
 }
