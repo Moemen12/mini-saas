@@ -35,7 +35,7 @@ export function UserProfileDropdown({ user }: Readonly<UserProfileDropdownProps>
     const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
     const closeDropdown = () => setIsDropdownOpen(false);
 
-    const userInitials = user.email?.substring(0, 2).toUpperCase() || "U";
+    const userInitials = user.email?.substring(0, 2).toUpperCase();
     const userName = user.user_metadata.name;
     const chevronRotation = isDropdownOpen ? "rotate-180" : "";
 
@@ -45,8 +45,8 @@ export function UserProfileDropdown({ user }: Readonly<UserProfileDropdownProps>
                 onClick={toggleDropdown}
                 className="flex items-center w-full p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             >
-                <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden shrink-0">
-                    <span className="text-xs font-bold text-primary">
+                <div className="h-9 w-9 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center overflow-hidden shrink-0 transition-colors duration-200">
+                    <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-400 tracking-tight">
                         {userInitials}
                     </span>
                 </div>

@@ -9,13 +9,10 @@ import { ROUTES } from "@/config/routes";
 const navigation = [
     { name: 'Dashboard', href: ROUTES.DASHBOARD, icon: 'dashboard' },
     { name: 'Projects', href: ROUTES.PROJECTS, icon: 'assignment' },
-    { name: 'Team', href: ROUTES.TEAM, icon: 'groups' },
-    { name: 'Analytics', href: ROUTES.ANALYTICS, icon: 'insights' },
 ];
 
 const account = [
     { name: 'Settings', href: ROUTES.SETTINGS, icon: 'settings' },
-    { name: 'Support', href: ROUTES.SUPPORT, icon: 'help_outline' },
 ];
 
 interface DashboardSidebarProps {
