@@ -27,7 +27,7 @@ export function SignupForm() {
     const onSubmit = (data: SignupFields) => {
         mutate(data, {
             onSuccess: () => {
-                router.push("/auth/signin?message=Check your email to verify")
+                router.push(ROUTES.DASHBOARD)
             },
         })
     }

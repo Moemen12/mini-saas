@@ -7,18 +7,26 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "prepare": "husky"
+    "prepare": "husky",
+    "db:generate": "npx drizzle-kit generate",
+    "db:push": "npx supabase db push",
+    "db:reset": "npx supabase db reset",
+    "db:status": "npx supabase db remote commit",
+    "db:customize": "npx drizzle-kit generate --custom",
+    "db:seed": "tsx src/infrastructure/database/drizzle/seed.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@supabase/ssr": "^0.8.0",
     "@tanstack/react-query": "^5.90.20",
+    "date-fns": "^4.1.0",
     "drizzle-orm": "^0.45.1",
     "next": "16.1.6",
     "postgres": "^3.4.8",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.71.1",
+    "server-only": "^0.0.1",
     "zod": "^4.3.6"
   },
   "devDependencies": {
@@ -33,6 +41,7 @@
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^5.1.3",
     "dotenv": "^17.2.4",
+    "drizzle-kit": "^0.31.9",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "eslint-config-prettier": "^10.1.8",
