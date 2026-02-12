@@ -37,6 +37,7 @@ export function SignupForm() {
             <Input
                 label="Full Name"
                 type="text"
+                autoComplete="name"
                 placeholder="John Doe"
                 {...register("name")}
                 error={errors.name?.message}
@@ -45,6 +46,7 @@ export function SignupForm() {
             <Input
                 label="Email"
                 type="email"
+                autoComplete="email"
                 placeholder="name@company.com"
                 {...register("email")}
                 error={errors.email?.message}
@@ -53,6 +55,7 @@ export function SignupForm() {
             <Input
                 label="Password"
                 type="password"
+                autoComplete="new-password"
                 placeholder="••••••••"
                 {...register("password")}
                 error={errors.password?.message}
@@ -61,6 +64,7 @@ export function SignupForm() {
             <Input
                 label="Confirm Password"
                 type="password"
+                autoComplete="new-password"
                 placeholder="••••••••"
                 {...register("confirmPassword")}
                 error={errors.confirmPassword?.message}

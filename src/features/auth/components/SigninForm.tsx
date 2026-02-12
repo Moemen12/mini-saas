@@ -27,7 +27,7 @@ export function SigninForm() {
     const onSubmit = (data: SigninFields) => {
         mutate(data, {
             onSuccess: () => {
-                router.push("/dashboard")
+                router.push(ROUTES.DASHBOARD)
             },
         })
     }
@@ -37,6 +37,7 @@ export function SigninForm() {
             <Input
                 label="Email"
                 type="email"
+                autoComplete="email"
                 placeholder="name@company.com"
                 {...register("email")}
                 error={errors.email?.message}
@@ -45,6 +46,7 @@ export function SigninForm() {
             <Input
                 label="Password"
                 type="password"
+                autoComplete="current-password"
                 placeholder="••••••••"
                 {...register("password")}
                 error={errors.password?.message}
