@@ -1,19 +1,18 @@
 import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react';
-import path from 'node:path';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-    plugins: [react(), tsconfigPaths()],
+    plugins: [tsconfigPaths(), react()],
     test: {
         environment: 'jsdom',
         globals: true,
-        setupFiles: './__tests__/setup.ts',
-        include: ['__tests__/unit/**/*.test.ts'],
-    },
-    resolve: {
-        alias: {
-            '@': path.resolve(__dirname, './src'),
-        },
+        setupFiles: [], // Add setup files if needed later
+        exclude: [
+            '**/node_modules/**',
+            '**/dist/**',
+            '**/.next/**',
+            '**/__tests__/e2e/**', // Exclude Playwright tests
+        ],
     },
 });

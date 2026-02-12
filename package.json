@@ -13,7 +13,9 @@
     "db:reset": "npx supabase db reset",
     "db:status": "npx supabase db remote commit",
     "db:customize": "npx drizzle-kit generate --custom",
-    "db:seed": "tsx src/infrastructure/database/drizzle/seed.ts"
+    "db:seed": "tsx src/infrastructure/database/drizzle/seed.ts",
+    "test": "vitest run",
+    "test:e2e": "playwright test --workers=1"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
