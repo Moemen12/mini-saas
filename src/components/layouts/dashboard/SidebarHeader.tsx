@@ -14,6 +14,7 @@ export function SidebarHeader({ onClose }: Readonly<SidebarHeaderProps>) {
                 </span>
             </div>
             <button
+                type="button"
                 onClick={onClose}
                 className="p-1 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg lg:hidden"
                 aria-label="Close sidebar"

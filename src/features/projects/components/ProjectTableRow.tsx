@@ -98,6 +98,7 @@ export function ProjectTableRow({ project, onEdit }: Readonly<ProjectTableRowPro
             <td className="px-6 py-4 text-right">
                 <div className="relative inline-block text-left">
                     <button
+                        type="button"
                         ref={buttonRef}
                         onClick={handleMenuToggle}
                         className={`p-1 rounded-md transition-colors ${isMenuOpen ? 'bg-slate-200 dark:bg-slate-700 text-slate-900' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'}`}
@@ -113,6 +114,7 @@ export function ProjectTableRow({ project, onEdit }: Readonly<ProjectTableRowPro
                         >
                             <div className="py-1 text-left">
                                 <button
+                                    type="button"
                                     onClick={() => { setIsMenuOpen(false); onEdit(); }}
                                     disabled={isDeleting}
                                     className="flex items-center w-full px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors disabled:opacity-50"
@@ -120,6 +122,7 @@ export function ProjectTableRow({ project, onEdit }: Readonly<ProjectTableRowPro
                                     <span className="material-icons text-base mr-3 text-slate-400">edit</span>Edit
                                 </button>
                                 <button
+                                    type="button"
                                     onClick={handleDelete}
                                     disabled={isDeleting}
                                     className="flex items-center w-full px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50"

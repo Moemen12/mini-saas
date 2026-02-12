@@ -33,6 +33,7 @@ export function DashboardLayoutClient({ children }: Readonly<DashboardLayoutClie
         <div className="flex h-screen overflow-hidden bg-background-light dark:bg-background-dark">
             {isSidebarOpen && (
                 <button
+                    type="button"
                     className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden"
                     onClick={closeSidebar}
                     aria-label="Close sidebar"

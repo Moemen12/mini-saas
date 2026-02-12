@@ -30,6 +30,7 @@ export function ProjectTableFooter({
 
             <div className="flex items-center space-x-2">
                 <button
+                    type="button"
                     onClick={() => onPageChange(currentPage - 1)}
                     disabled={isPrevDisabled}
                     className="px-4 py-1.5 text-xs font-semibold border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
@@ -37,6 +38,7 @@ export function ProjectTableFooter({
                     Previous
                 </button>
                 <button
+                    type="button"
                     onClick={() => onPageChange(currentPage + 1)}
                     disabled={isNextDisabled}
                     className="px-4 py-1.5 text-xs font-semibold border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"

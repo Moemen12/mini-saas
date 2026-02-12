@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "hint": "npx hint .",
     "prepare": "husky",
     "db:generate": "npx drizzle-kit generate",
     "db:push": "npx supabase db push",

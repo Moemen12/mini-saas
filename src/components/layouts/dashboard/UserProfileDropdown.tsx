@@ -45,6 +45,7 @@ export function UserProfileDropdown({ user }: Readonly<UserProfileDropdownProps>
     return (
         <div className="relative" ref={dropdownRef}>
             <button
+                type="button"
                 onClick={toggleDropdown}
                 aria-label="User profile"
                 className="flex items-center w-full p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
@@ -83,6 +84,7 @@ export function UserProfileDropdown({ user }: Readonly<UserProfileDropdownProps>
                     </Link>
                     <div className="border-t border-slate-200 dark:border-slate-700" />
                     <button
+                        type="button"
                         onClick={handleLogout}
                         className="flex items-center w-full px-4 py-3 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
                     >
