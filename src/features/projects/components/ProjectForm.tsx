@@ -1,6 +1,7 @@
 'use client'
 
 import { useForm } from "react-hook-form";
+import { useEffect, useMemo } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createProjectSchema, CreateProjectFields } from "../schemas/project-schema";
 import { useCreateProject } from "../hooks/useCreateProject";
@@ -8,6 +9,7 @@ import { useUpdateProject } from "../hooks/useUpdateProject";
 import { useUsers } from "../hooks/useUsers";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { Select } from "@/components/ui/Select";
 import { useUser } from "@/features/auth";
 import { Project } from "@/db/drizzle/schema/projects";
 
@@ -22,31 +24,51 @@ export function ProjectForm({ project, onSuccess, onCancel }: Readonly<ProjectFo
     const { mutate: updateProject, isPending: isUpdating, error: updateError } = useUpdateProject();
     const { data: users = [], isLoading: usersLoading } = useUsers();
     const { data: currentUser } = useUser();
-    const otherUsers = users.filter(u => u.id !== currentUser?.id);
+    
+    // Filter out current user from assignment options
+    const otherUsers = useMemo(() => 
+        users.filter(u => u.id !== currentUser?.id),
+    [users, currentUser?.id]);
 
     const isPending = isCreating || isUpdating;
     const serverError = createError || updateError;
 
+    // Determine the initial assigned_to value
+    // We check both assignedToId (from API) and assigned_to (from DB schema)
+    const initialAssignedTo = useMemo(() => {
+        if (!project) return "";
+        const p = project as any;
+        return p.assignedToId || p.assigned_to || "";
+    }, [project]);
+
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        reset,
+        formState: { errors, isDirty },
     } = useForm<CreateProjectFields>({
         resolver: zodResolver(createProjectSchema),
-        values: project ? {
-            name: project.name,
-            status: project.status,
-            deadline: project.deadline ? new Date(project.deadline).toISOString().split('T')[0] : "",
-            assigned_to: (project as { assignedToId?: string | null }).assignedToId ?? "",
-            budget: Number(project.budget),
-        } : {
-            name: "",
-            status: "active",
-            deadline: "",
-            assigned_to: "",
-            budget: 0,
+        defaultValues: {
+            name: project?.name ?? "",
+            status: project?.status ?? "active",
+            deadline: project?.deadline ? new Date(project.deadline).toISOString().split('T')[0] : "",
+            assigned_to: initialAssignedTo,
+            budget: project?.budget ? Number(project.budget) : 0,
         },
     });
+
+    // Update form values when project or users change to ensure correct data is shown
+    useEffect(() => {
+        if (project) {
+            reset({
+                name: project.name,
+                status: project.status,
+                deadline: project.deadline ? new Date(project.deadline).toISOString().split('T')[0] : "",
+                assigned_to: initialAssignedTo,
+                budget: Number(project.budget),
+            });
+        }
+    }, [project, initialAssignedTo, reset]);
 
     const onSubmit = (data: CreateProjectFields) => {
         if (project) {
@@ -64,6 +86,20 @@ export function ProjectForm({ project, onSuccess, onCancel }: Readonly<ProjectFo
         }
     };
 
+    const statusOptions = [
+        { value: "active", label: "Active" },
+        { value: "on hold", label: "On Hold" },
+        { value: "completed", label: "Completed" },
+    ];
+
+    const userOptions = [
+        { value: "", label: "Unassigned" },
+        ...otherUsers.map((user) => ({
+            value: user.id,
+            label: user.email.split("@")[0],
+        })),
+    ];
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <Input
@@ -74,23 +110,12 @@ export function ProjectForm({ project, onSuccess, onCancel }: Readonly<ProjectFo
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="w-full">
-                    <label htmlFor="project-status" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                        Status
-                    </label>
-                    <select
-                        id="project-status"
-                        {...register("status")}
-                        className="block w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-primary outline-none text-slate-900 dark:text-white"
-                    >
-                        <option value="active">Active</option>
-                        <option value="on hold">On Hold</option>
-                        <option value="completed">Completed</option>
-                    </select>
-                    {errors.status && (
-                        <p className="mt-1.5 text-xs text-red-500">{errors.status.message}</p>
-                    )}
-                </div>
+                <Select
+                    label="Status"
+                    options={statusOptions}
+                    error={errors.status?.message}
+                    {...register("status")}
+                />
 
                 <Input
                     label="Deadline"
@@ -101,27 +126,13 @@ export function ProjectForm({ project, onSuccess, onCancel }: Readonly<ProjectFo
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="w-full">
-                    <label htmlFor="assigned-to" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                        Assigned To
-                    </label>
-                    <select
-                        id="assigned-to"
-                        {...register("assigned_to")}
-                        disabled={usersLoading}
-                        className="block w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-primary outline-none text-slate-900 dark:text-white disabled:opacity-50"
-                    >
-                        <option value="">Unassigned</option>
-                        {otherUsers.map((user) => (
-                            <option key={user.id} value={user.id}>
-                                {user.email.split("@")[0]}
-                            </option>
-                        ))}
-                    </select>
-                    {errors.assigned_to && (
-                        <p className="mt-1.5 text-xs text-red-500">{errors.assigned_to.message}</p>
-                    )}
-                </div>
+                <Select
+                    label="Assigned To"
+                    options={userOptions}
+                    disabled={usersLoading}
+                    error={errors.assigned_to?.message}
+                    {...register("assigned_to")}
+                />
 
                 <Input
                     label="Budget ($)"
