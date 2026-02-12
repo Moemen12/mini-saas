@@ -13,7 +13,7 @@
     "db:reset": "npx supabase db reset",
     "db:status": "npx supabase db remote commit",
     "db:customize": "npx drizzle-kit generate --custom",
-    "db:seed": "tsx src/infrastructure/database/drizzle/seed.ts",
+    "db:seed": "tsx --env-file=.env.local src/db/seed.ts",
     "test": "vitest run",
     "test:e2e": "playwright test --workers=1"
   },
@@ -34,6 +34,7 @@
   "devDependencies": {
     "@commitlint/cli": "^20.4.1",
     "@commitlint/config-conventional": "^20.4.1",
+    "@faker-js/faker": "^9.5.0",
     "@playwright/test": "^1.58.2",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.9.1",
