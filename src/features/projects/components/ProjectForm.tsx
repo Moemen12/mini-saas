@@ -60,15 +60,24 @@ export function ProjectForm({ project, onSuccess, onCancel }: Readonly<ProjectFo
     // Update form values when project or users change to ensure correct data is shown
     useEffect(() => {
         if (project) {
-            reset({
+            const formData = {
                 name: project.name,
                 status: project.status,
                 deadline: project.deadline ? new Date(project.deadline).toISOString().split('T')[0] : "",
                 assigned_to: initialAssignedTo,
                 budget: Number(project.budget),
+            };
+            reset(formData);
+        } else {
+            reset({
+                name: "",
+                status: "active",
+                deadline: "",
+                assigned_to: "",
+                budget: 0,
             });
         }
-    }, [project, initialAssignedTo, reset]);
+    }, [project, initialAssignedTo, reset, usersLoading]);
 
     const onSubmit = (data: CreateProjectFields) => {
         if (project) {

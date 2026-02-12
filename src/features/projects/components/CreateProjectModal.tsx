@@ -17,6 +17,7 @@ export function ProjectModal({ isOpen, onClose, project }: Readonly<ProjectModal
             title={project ? "Edit Project" : "Create New Project"}
         >
             <ProjectForm
+                key={project?.id ?? 'new'}
                 project={project}
                 onSuccess={onClose}
                 onCancel={onClose}
