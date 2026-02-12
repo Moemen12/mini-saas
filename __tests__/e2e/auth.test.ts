@@ -22,7 +22,7 @@ test.describe('Authentication Flows', () => {
 
     test('should allow a user to log out', async () => {
         await projectsPage.navigate();
-        await projectsPage.login('moemensaadeh936@gmail.com', 'AB12??cd');
+        await projectsPage.login('example@gmail.com', 'se2sve4cd');
 
         await authPage.logout();
         // Verify we are back on the sign-in page
