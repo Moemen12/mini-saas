@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { ROUTES } from "@/config/routes";
@@ -11,6 +12,7 @@ interface UserProfileDropdownProps {
 
 export function UserProfileDropdown({ user }: Readonly<UserProfileDropdownProps>) {
     const router = useRouter();
+    const queryClient = useQueryClient();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const supabase = createClient();
@@ -28,6 +30,7 @@ export function UserProfileDropdown({ user }: Readonly<UserProfileDropdownProps>
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
+        queryClient.clear(); // Clear all React Query cache
         router.push(ROUTES.AUTH.SIGNIN);
         router.refresh();
     };

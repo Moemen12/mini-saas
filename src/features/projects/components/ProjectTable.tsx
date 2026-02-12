@@ -7,19 +7,16 @@ import { ProjectTableHeader } from "./ProjectTableHeader";
 import { ProjectTableRow } from "./ProjectTableRow";
 import { ProjectTableFooter } from "./ProjectTableFooter";
 import { ProjectTableError } from "./ProjectTableError";
-import { CreateProjectModal } from "../components/CreateProjectModal";
 import { Project } from "@/db/drizzle/schema/projects";
+import { ProjectModal } from "./CreateProjectModal";
 
 export function ProjectTable() {
-
     const { data: projects = [], isLoading, isError } = useProjects();
-
-
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
-
     const itemsPerPage = 5;
 
     const filteredProjects = useMemo(() => {
@@ -34,13 +31,21 @@ export function ProjectTable() {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const paginatedProjects = filteredProjects.slice(startIndex, startIndex + itemsPerPage);
 
-
     const handleFilterUpdate = (type: 'search' | 'status', value: string) => {
         if (type === 'search') setSearch(value);
         if (type === 'status') setStatusFilter(value);
         setCurrentPage(1);
     };
 
+    const handleEdit = (project: Project) => {
+        setSelectedProject(project);
+        setIsModalOpen(true);
+    };
+
+    const handleAdd = () => {
+        setSelectedProject(null);
+        setIsModalOpen(true);
+    };
 
     if (isLoading) return <ProjectTableSkeleton />;
     if (isError) return <ProjectTableError />;
@@ -53,7 +58,7 @@ export function ProjectTable() {
                     onSearchChange={(val) => handleFilterUpdate('search', val)}
                     status={statusFilter}
                     onStatusChange={(val) => handleFilterUpdate('status', val)}
-                    onAddClick={() => setIsModalOpen(true)}
+                    onAddClick={handleAdd}
                 />
 
                 <div className="overflow-x-auto">
@@ -89,14 +94,17 @@ export function ProjectTable() {
                                 </tr>
                             ) : (
                                 paginatedProjects.map((project: Project) => (
-                                    <ProjectTableRow key={project.id} project={project} />
+                                    <ProjectTableRow
+                                        key={project.id}
+                                        project={project}
+                                        onEdit={() => handleEdit(project)}
+                                    />
                                 ))
                             )}
                         </tbody>
                     </table>
                 </div>
 
-                {/* Footer with Pagination Controls */}
                 <ProjectTableFooter
                     projectCount={filteredProjects.length}
                     currentPage={currentPage}
@@ -105,9 +113,9 @@ export function ProjectTable() {
                 />
             </div>
 
-            {/* Modal for adding new projects */}
-            <CreateProjectModal
+            <ProjectModal
                 isOpen={isModalOpen}
+                project={selectedProject}
                 onClose={() => setIsModalOpen(false)}
             />
         </>

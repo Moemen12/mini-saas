@@ -13,8 +13,10 @@ export const createProjectSchema = z.object({
             message: "Deadline cannot be in the past",
         }),
 
-    assigned_to: z
-        .uuid("Please select a valid team member"),
+    assigned_to: z.union([
+        z.literal(""),
+        z.uuid("Please select a valid team member")
+    ]),
     budget: z.number().min(0).max(1000000),
 });
 

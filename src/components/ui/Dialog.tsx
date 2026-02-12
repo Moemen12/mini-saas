@@ -19,12 +19,12 @@ export function Dialog({ isOpen, onClose, title, children }: Readonly<DialogProp
 
         if (isOpen) {
             document.body.style.overflow = "hidden";
-            window.addEventListener("keydown", handleEscape);
+            globalThis.window.addEventListener("keydown", handleEscape);
         }
 
         return () => {
             document.body.style.overflow = "unset";
-            window.removeEventListener("keydown", handleEscape);
+            globalThis.window.removeEventListener("keydown", handleEscape);
         };
     }, [isOpen, onClose]);
 

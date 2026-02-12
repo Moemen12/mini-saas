@@ -1,20 +1,23 @@
 import React from "react";
 import { Dialog } from "@/components/ui/Dialog";
-import { CreateProjectForm } from "./CreateProjectForm";
+import { Project } from "@/db/drizzle/schema/projects";
+import { ProjectForm } from "./ProjectForm";
 
-interface CreateProjectModalProps {
+interface ProjectModalProps {
     isOpen: boolean;
     onClose: () => void;
+    project?: Project | null;
 }
 
-export function CreateProjectModal({ isOpen, onClose }: Readonly<CreateProjectModalProps>) {
+export function ProjectModal({ isOpen, onClose, project }: Readonly<ProjectModalProps>) {
     return (
         <Dialog
             isOpen={isOpen}
             onClose={onClose}
-            title="Create New Project"
+            title={project ? "Edit Project" : "Create New Project"}
         >
-            <CreateProjectForm
+            <ProjectForm
+                project={project}
                 onSuccess={onClose}
                 onCancel={onClose}
             />

@@ -14,3 +14,11 @@ export async function fetchProjects() {
 export async function fetchProjectStats() {
     return apiRequest<ProjectStats>("/api/projects/stats", "GET");
 }
+
+export async function updateProject(id: string, data: CreateProjectFields) {
+    return apiRequest(`/api/projects?id=${id}`, "PUT", data);
+}
+
+export async function deleteProject(id: string) {
+    return apiRequest(`/api/projects?id=${id}`, "DELETE");
+}
