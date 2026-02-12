@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { useUser } from "@/features/auth";
 import { Project } from "@/db/drizzle/schema/projects";
+import { useMemo, useEffect } from "react";
 
 interface ProjectFormProps {
     project?: Project | null;
@@ -22,31 +23,50 @@ export function ProjectForm({ project, onSuccess, onCancel }: Readonly<ProjectFo
     const { mutate: updateProject, isPending: isUpdating, error: updateError } = useUpdateProject();
     const { data: users = [], isLoading: usersLoading } = useUsers();
     const { data: currentUser } = useUser();
-    const otherUsers = users.filter(u => u.id !== currentUser?.id);
+    const otherUsers = useMemo(() =>
+        users.filter(u => u.id !== currentUser?.id),
+        [users, currentUser?.id]
+    );
 
     const isPending = isCreating || isUpdating;
     const serverError = createError || updateError;
+    const projectWithIds = project as (Project & { assignedToId?: string | null });
+    const assignedId = projectWithIds?.assignedToId ?? "";
 
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm<CreateProjectFields>({
         resolver: zodResolver(createProjectSchema),
-        values: project ? {
-            name: project.name,
-            status: project.status,
-            deadline: project.deadline ? new Date(project.deadline).toISOString().split('T')[0] : "",
-            assigned_to: (project as { assignedToId?: string | null }).assignedToId ?? "",
-            budget: Number(project.budget),
-        } : {
-            name: "",
-            status: "active",
-            deadline: "",
-            assigned_to: "",
-            budget: 0,
-        },
+        values: useMemo(() => {
+            if (!project) return {
+                name: "",
+                status: "active",
+                deadline: "",
+                assigned_to: "",
+                budget: 0,
+            };
+
+            return {
+                name: project.name,
+                status: project.status,
+                deadline: project.deadline ? new Date(project.deadline).toISOString().split('T')[0] : "",
+                assigned_to: assignedId,
+                budget: Number(project.budget),
+            };
+        }, [project, assignedId]),
     });
+
+    useEffect(() => {
+        if (!usersLoading && assignedId) {
+            reset(prev => ({
+                ...prev,
+                assigned_to: assignedId
+            }));
+        }
+    }, [usersLoading, assignedId, reset]);
 
     const onSubmit = (data: CreateProjectFields) => {
         if (project) {
@@ -151,5 +171,3 @@ export function ProjectForm({ project, onSuccess, onCancel }: Readonly<ProjectFo
         </form>
     );
 }
-
-

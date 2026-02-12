@@ -43,8 +43,8 @@ export const GET = withErrorHandling(async () => {
     const userMap = Object.fromEntries(users.map(u => [u.id, u.email]));
     const projectsWithUserEmails = userProjects.map(project => ({
         ...project,
-        assignedToId: project.assigned_to,  // UUID for form
-        assignedTo: project.assigned_to ? userMap[project.assigned_to] : null  // Email for display
+        assignedToId: project.assigned_to,
+        assignedTo: project.assigned_to ? userMap[project.assigned_to] : null
     }));
 
     return NextResponse.json(projectsWithUserEmails);
